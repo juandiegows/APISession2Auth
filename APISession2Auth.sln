@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32901.82
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APISession2Auth", "APISession2Auth\APISession2Auth.csproj", "{BD39640C-98BF-4B57-85CA-21DA4A2BF71A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD39640C-98BF-4B57-85CA-21DA4A2BF71A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD39640C-98BF-4B57-85CA-21DA4A2BF71A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD39640C-98BF-4B57-85CA-21DA4A2BF71A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD39640C-98BF-4B57-85CA-21DA4A2BF71A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EB7D721D-AFB8-4240-9EC5-D12368023F53}
+	EndGlobalSection
+EndGlobal

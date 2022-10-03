@@ -1,0 +1,775 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Session2WSTowersModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="campeonatos">
+          <Key>
+            <PropertyRef Name="cod_camp" />
+          </Key>
+          <Property Name="cod_camp" Type="int" Nullable="false" />
+          <Property Name="dsc_camp" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="ano" Type="int" Nullable="false" />
+          <Property Name="tipo" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="dat_ini" Type="smalldatetime" Nullable="false" />
+          <Property Name="dat_fim" Type="smalldatetime" Nullable="false" />
+          <Property Name="def_tipo" Type="char" MaxLength="2" />
+        </EntityType>
+        <EntityType Name="estadios">
+          <Key>
+            <PropertyRef Name="cod_est" />
+          </Key>
+          <Property Name="cod_est" Type="int" Nullable="false" />
+          <Property Name="nom_est" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="capacidade" Type="int" Nullable="false" />
+          <Property Name="uf_estadio" Type="char" MaxLength="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="historicos">
+          <Key>
+            <PropertyRef Name="cod_jog" />
+            <PropertyRef Name="dat_ini" />
+          </Key>
+          <Property Name="cod_jog" Type="int" Nullable="false" />
+          <Property Name="dat_ini" Type="smalldatetime" Nullable="false" />
+          <Property Name="cod_time" Type="int" Nullable="false" />
+          <Property Name="dat_fim" Type="smalldatetime" />
+        </EntityType>
+        <EntityType Name="jogadores">
+          <Key>
+            <PropertyRef Name="cod_jog" />
+          </Key>
+          <Property Name="cod_jog" Type="int" Nullable="false" />
+          <Property Name="dat_nasc" Type="smalldatetime" Nullable="false" />
+          <Property Name="salario" Type="numeric" Precision="8" Scale="2" Nullable="false" />
+          <Property Name="cod_pos" Type="int" Nullable="false" />
+          <Property Name="nom_jog" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="cod_time" Type="int" />
+        </EntityType>
+        <EntityType Name="jogos">
+          <Key>
+            <PropertyRef Name="cod_camp" />
+            <PropertyRef Name="cod_time1" />
+            <PropertyRef Name="cod_time2" />
+          </Key>
+          <Property Name="cod_camp" Type="int" Nullable="false" />
+          <Property Name="cod_time1" Type="int" Nullable="false" />
+          <Property Name="cod_time2" Type="int" Nullable="false" />
+          <Property Name="cod_estadio" Type="int" Nullable="false" />
+          <Property Name="data" Type="smalldatetime" Nullable="false" />
+          <Property Name="resultado" Type="int" />
+        </EntityType>
+        <EntityType Name="participacoes">
+          <Key>
+            <PropertyRef Name="cod_camp" />
+            <PropertyRef Name="cod_time" />
+          </Key>
+          <Property Name="cod_camp" Type="int" Nullable="false" />
+          <Property Name="cod_time" Type="int" Nullable="false" />
+          <Property Name="pontos" Type="int" Nullable="false" />
+          <Property Name="classif" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="patrocinadores">
+          <Key>
+            <PropertyRef Name="cod_pat" />
+          </Key>
+          <Property Name="cod_pat" Type="int" Nullable="false" />
+          <Property Name="nom_pat" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="pais" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="patrocinios">
+          <Key>
+            <PropertyRef Name="ano" />
+            <PropertyRef Name="cod_time" />
+            <PropertyRef Name="cod_pat" />
+          </Key>
+          <Property Name="ano" Type="int" Nullable="false" />
+          <Property Name="cod_time" Type="int" Nullable="false" />
+          <Property Name="cod_pat" Type="int" Nullable="false" />
+          <Property Name="valor" Type="numeric" Precision="9" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="posicoes">
+          <Key>
+            <PropertyRef Name="cod_pos" />
+          </Key>
+          <Property Name="cod_pos" Type="int" Nullable="false" />
+          <Property Name="dsc_pos" Type="varchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="times">
+          <Key>
+            <PropertyRef Name="cod_time" />
+          </Key>
+          <Property Name="cod_time" Type="int" Nullable="false" />
+          <Property Name="uf_time" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="nom_time" Type="varchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <Association Name="historicos_fk_jogadores">
+          <End Role="jogadores" Type="Self.jogadores" Multiplicity="1" />
+          <End Role="historicos" Type="Self.historicos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="jogadores">
+              <PropertyRef Name="cod_jog" />
+            </Principal>
+            <Dependent Role="historicos">
+              <PropertyRef Name="cod_jog" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="historicos_fk_times">
+          <End Role="times" Type="Self.times" Multiplicity="1" />
+          <End Role="historicos" Type="Self.historicos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="times">
+              <PropertyRef Name="cod_time" />
+            </Principal>
+            <Dependent Role="historicos">
+              <PropertyRef Name="cod_time" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="jogadores_fk_posicoes">
+          <End Role="posicoes" Type="Self.posicoes" Multiplicity="1" />
+          <End Role="jogadores" Type="Self.jogadores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="posicoes">
+              <PropertyRef Name="cod_pos" />
+            </Principal>
+            <Dependent Role="jogadores">
+              <PropertyRef Name="cod_pos" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="jogadores_fk_times">
+          <End Role="times" Type="Self.times" Multiplicity="0..1" />
+          <End Role="jogadores" Type="Self.jogadores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="times">
+              <PropertyRef Name="cod_time" />
+            </Principal>
+            <Dependent Role="jogadores">
+              <PropertyRef Name="cod_time" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="jogos_fk_campeonatos">
+          <End Role="campeonatos" Type="Self.campeonatos" Multiplicity="1" />
+          <End Role="jogos" Type="Self.jogos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="campeonatos">
+              <PropertyRef Name="cod_camp" />
+            </Principal>
+            <Dependent Role="jogos">
+              <PropertyRef Name="cod_camp" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="jogos_fk_estadios">
+          <End Role="estadios" Type="Self.estadios" Multiplicity="1" />
+          <End Role="jogos" Type="Self.jogos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="estadios">
+              <PropertyRef Name="cod_est" />
+            </Principal>
+            <Dependent Role="jogos">
+              <PropertyRef Name="cod_estadio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="jogos_fk_times_1">
+          <End Role="times" Type="Self.times" Multiplicity="1" />
+          <End Role="jogos" Type="Self.jogos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="times">
+              <PropertyRef Name="cod_time" />
+            </Principal>
+            <Dependent Role="jogos">
+              <PropertyRef Name="cod_time1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="jogos_fk_times_2">
+          <End Role="times" Type="Self.times" Multiplicity="1" />
+          <End Role="jogos" Type="Self.jogos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="times">
+              <PropertyRef Name="cod_time" />
+            </Principal>
+            <Dependent Role="jogos">
+              <PropertyRef Name="cod_time2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="participacoes_fk_campeonatos">
+          <End Role="campeonatos" Type="Self.campeonatos" Multiplicity="1" />
+          <End Role="participacoes" Type="Self.participacoes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="campeonatos">
+              <PropertyRef Name="cod_camp" />
+            </Principal>
+            <Dependent Role="participacoes">
+              <PropertyRef Name="cod_camp" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="participacoes_fk_times">
+          <End Role="times" Type="Self.times" Multiplicity="1" />
+          <End Role="participacoes" Type="Self.participacoes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="times">
+              <PropertyRef Name="cod_time" />
+            </Principal>
+            <Dependent Role="participacoes">
+              <PropertyRef Name="cod_time" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="patrocinios_fk_patrocinadores">
+          <End Role="patrocinadores" Type="Self.patrocinadores" Multiplicity="1" />
+          <End Role="patrocinios" Type="Self.patrocinios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="patrocinadores">
+              <PropertyRef Name="cod_pat" />
+            </Principal>
+            <Dependent Role="patrocinios">
+              <PropertyRef Name="cod_pat" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="patrocinios_fk_times">
+          <End Role="times" Type="Self.times" Multiplicity="1" />
+          <End Role="patrocinios" Type="Self.patrocinios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="times">
+              <PropertyRef Name="cod_time" />
+            </Principal>
+            <Dependent Role="patrocinios">
+              <PropertyRef Name="cod_time" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Session2WSTowersModelStoreContainer">
+          <EntitySet Name="campeonatos" EntityType="Self.campeonatos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="estadios" EntityType="Self.estadios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="historicos" EntityType="Self.historicos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="jogadores" EntityType="Self.jogadores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="jogos" EntityType="Self.jogos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="participacoes" EntityType="Self.participacoes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="patrocinadores" EntityType="Self.patrocinadores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="patrocinios" EntityType="Self.patrocinios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="posicoes" EntityType="Self.posicoes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="times" EntityType="Self.times" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="historicos_fk_jogadores" Association="Self.historicos_fk_jogadores">
+            <End Role="jogadores" EntitySet="jogadores" />
+            <End Role="historicos" EntitySet="historicos" />
+          </AssociationSet>
+          <AssociationSet Name="historicos_fk_times" Association="Self.historicos_fk_times">
+            <End Role="times" EntitySet="times" />
+            <End Role="historicos" EntitySet="historicos" />
+          </AssociationSet>
+          <AssociationSet Name="jogadores_fk_posicoes" Association="Self.jogadores_fk_posicoes">
+            <End Role="posicoes" EntitySet="posicoes" />
+            <End Role="jogadores" EntitySet="jogadores" />
+          </AssociationSet>
+          <AssociationSet Name="jogadores_fk_times" Association="Self.jogadores_fk_times">
+            <End Role="times" EntitySet="times" />
+            <End Role="jogadores" EntitySet="jogadores" />
+          </AssociationSet>
+          <AssociationSet Name="jogos_fk_campeonatos" Association="Self.jogos_fk_campeonatos">
+            <End Role="campeonatos" EntitySet="campeonatos" />
+            <End Role="jogos" EntitySet="jogos" />
+          </AssociationSet>
+          <AssociationSet Name="jogos_fk_estadios" Association="Self.jogos_fk_estadios">
+            <End Role="estadios" EntitySet="estadios" />
+            <End Role="jogos" EntitySet="jogos" />
+          </AssociationSet>
+          <AssociationSet Name="jogos_fk_times_1" Association="Self.jogos_fk_times_1">
+            <End Role="times" EntitySet="times" />
+            <End Role="jogos" EntitySet="jogos" />
+          </AssociationSet>
+          <AssociationSet Name="jogos_fk_times_2" Association="Self.jogos_fk_times_2">
+            <End Role="times" EntitySet="times" />
+            <End Role="jogos" EntitySet="jogos" />
+          </AssociationSet>
+          <AssociationSet Name="participacoes_fk_campeonatos" Association="Self.participacoes_fk_campeonatos">
+            <End Role="campeonatos" EntitySet="campeonatos" />
+            <End Role="participacoes" EntitySet="participacoes" />
+          </AssociationSet>
+          <AssociationSet Name="participacoes_fk_times" Association="Self.participacoes_fk_times">
+            <End Role="times" EntitySet="times" />
+            <End Role="participacoes" EntitySet="participacoes" />
+          </AssociationSet>
+          <AssociationSet Name="patrocinios_fk_patrocinadores" Association="Self.patrocinios_fk_patrocinadores">
+            <End Role="patrocinadores" EntitySet="patrocinadores" />
+            <End Role="patrocinios" EntitySet="patrocinios" />
+          </AssociationSet>
+          <AssociationSet Name="patrocinios_fk_times" Association="Self.patrocinios_fk_times">
+            <End Role="times" EntitySet="times" />
+            <End Role="patrocinios" EntitySet="patrocinios" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Session2WSTowersModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="campeonatos">
+          <Key>
+            <PropertyRef Name="cod_camp" />
+          </Key>
+          <Property Name="cod_camp" Type="Int32" Nullable="false" />
+          <Property Name="dsc_camp" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ano" Type="Int32" Nullable="false" />
+          <Property Name="tipo" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="dat_ini" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="dat_fim" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="def_tipo" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="jogos" Relationship="Self.jogos_fk_campeonatos" FromRole="campeonatos" ToRole="jogos" />
+          <NavigationProperty Name="participacoes" Relationship="Self.participacoes_fk_campeonatos" FromRole="campeonatos" ToRole="participacoes" />
+        </EntityType>
+        <EntityType Name="estadios">
+          <Key>
+            <PropertyRef Name="cod_est" />
+          </Key>
+          <Property Name="cod_est" Type="Int32" Nullable="false" />
+          <Property Name="nom_est" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="capacidade" Type="Int32" Nullable="false" />
+          <Property Name="uf_estadio" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="jogos" Relationship="Self.jogos_fk_estadios" FromRole="estadios" ToRole="jogos" />
+        </EntityType>
+        <EntityType Name="historicos">
+          <Key>
+            <PropertyRef Name="cod_jog" />
+            <PropertyRef Name="dat_ini" />
+          </Key>
+          <Property Name="cod_jog" Type="Int32" Nullable="false" />
+          <Property Name="dat_ini" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="cod_time" Type="Int32" Nullable="false" />
+          <Property Name="dat_fim" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="jogadores" Relationship="Self.historicos_fk_jogadores" FromRole="historicos" ToRole="jogadores" />
+          <NavigationProperty Name="times" Relationship="Self.historicos_fk_times" FromRole="historicos" ToRole="times" />
+        </EntityType>
+        <EntityType Name="jogadores">
+          <Key>
+            <PropertyRef Name="cod_jog" />
+          </Key>
+          <Property Name="cod_jog" Type="Int32" Nullable="false" />
+          <Property Name="dat_nasc" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="salario" Type="Decimal" Precision="8" Scale="2" Nullable="false" />
+          <Property Name="cod_pos" Type="Int32" Nullable="false" />
+          <Property Name="nom_jog" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="cod_time" Type="Int32" />
+          <NavigationProperty Name="historicos" Relationship="Self.historicos_fk_jogadores" FromRole="jogadores" ToRole="historicos" />
+          <NavigationProperty Name="posicoes" Relationship="Self.jogadores_fk_posicoes" FromRole="jogadores" ToRole="posicoes" />
+          <NavigationProperty Name="times" Relationship="Self.jogadores_fk_times" FromRole="jogadores" ToRole="times" />
+        </EntityType>
+        <EntityType Name="jogos">
+          <Key>
+            <PropertyRef Name="cod_camp" />
+            <PropertyRef Name="cod_time1" />
+            <PropertyRef Name="cod_time2" />
+          </Key>
+          <Property Name="cod_camp" Type="Int32" Nullable="false" />
+          <Property Name="cod_time1" Type="Int32" Nullable="false" />
+          <Property Name="cod_time2" Type="Int32" Nullable="false" />
+          <Property Name="cod_estadio" Type="Int32" Nullable="false" />
+          <Property Name="data" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="resultado" Type="Int32" />
+          <NavigationProperty Name="campeonatos" Relationship="Self.jogos_fk_campeonatos" FromRole="jogos" ToRole="campeonatos" />
+          <NavigationProperty Name="estadios" Relationship="Self.jogos_fk_estadios" FromRole="jogos" ToRole="estadios" />
+          <NavigationProperty Name="times" Relationship="Self.jogos_fk_times_1" FromRole="jogos" ToRole="times" />
+          <NavigationProperty Name="times1" Relationship="Self.jogos_fk_times_2" FromRole="jogos" ToRole="times" />
+        </EntityType>
+        <EntityType Name="participacoes">
+          <Key>
+            <PropertyRef Name="cod_camp" />
+            <PropertyRef Name="cod_time" />
+          </Key>
+          <Property Name="cod_camp" Type="Int32" Nullable="false" />
+          <Property Name="cod_time" Type="Int32" Nullable="false" />
+          <Property Name="pontos" Type="Int32" Nullable="false" />
+          <Property Name="classif" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="campeonatos" Relationship="Self.participacoes_fk_campeonatos" FromRole="participacoes" ToRole="campeonatos" />
+          <NavigationProperty Name="times" Relationship="Self.participacoes_fk_times" FromRole="participacoes" ToRole="times" />
+        </EntityType>
+        <EntityType Name="patrocinadores">
+          <Key>
+            <PropertyRef Name="cod_pat" />
+          </Key>
+          <Property Name="cod_pat" Type="Int32" Nullable="false" />
+          <Property Name="nom_pat" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="pais" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="patrocinios" Relationship="Self.patrocinios_fk_patrocinadores" FromRole="patrocinadores" ToRole="patrocinios" />
+        </EntityType>
+        <EntityType Name="patrocinios">
+          <Key>
+            <PropertyRef Name="ano" />
+            <PropertyRef Name="cod_time" />
+            <PropertyRef Name="cod_pat" />
+          </Key>
+          <Property Name="ano" Type="Int32" Nullable="false" />
+          <Property Name="cod_time" Type="Int32" Nullable="false" />
+          <Property Name="cod_pat" Type="Int32" Nullable="false" />
+          <Property Name="valor" Type="Decimal" Precision="9" Scale="2" Nullable="false" />
+          <NavigationProperty Name="patrocinadores" Relationship="Self.patrocinios_fk_patrocinadores" FromRole="patrocinios" ToRole="patrocinadores" />
+          <NavigationProperty Name="times" Relationship="Self.patrocinios_fk_times" FromRole="patrocinios" ToRole="times" />
+        </EntityType>
+        <EntityType Name="posicoes">
+          <Key>
+            <PropertyRef Name="cod_pos" />
+          </Key>
+          <Property Name="cod_pos" Type="Int32" Nullable="false" />
+          <Property Name="dsc_pos" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="jogadores" Relationship="Self.jogadores_fk_posicoes" FromRole="posicoes" ToRole="jogadores" />
+        </EntityType>
+        <EntityType Name="times">
+          <Key>
+            <PropertyRef Name="cod_time" />
+          </Key>
+          <Property Name="cod_time" Type="Int32" Nullable="false" />
+          <Property Name="uf_time" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="nom_time" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="historicos" Relationship="Self.historicos_fk_times" FromRole="times" ToRole="historicos" />
+          <NavigationProperty Name="jogadores" Relationship="Self.jogadores_fk_times" FromRole="times" ToRole="jogadores" />
+          <NavigationProperty Name="jogos" Relationship="Self.jogos_fk_times_1" FromRole="times" ToRole="jogos" />
+          <NavigationProperty Name="jogos1" Relationship="Self.jogos_fk_times_2" FromRole="times" ToRole="jogos" />
+          <NavigationProperty Name="participacoes" Relationship="Self.participacoes_fk_times" FromRole="times" ToRole="participacoes" />
+          <NavigationProperty Name="patrocinios" Relationship="Self.patrocinios_fk_times" FromRole="times" ToRole="patrocinios" />
+        </EntityType>
+        <Association Name="jogos_fk_campeonatos">
+          <End Role="campeonatos" Type="Self.campeonatos" Multiplicity="1" />
+          <End Role="jogos" Type="Self.jogos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="campeonatos">
+              <PropertyRef Name="cod_camp" />
+            </Principal>
+            <Dependent Role="jogos">
+              <PropertyRef Name="cod_camp" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="participacoes_fk_campeonatos">
+          <End Role="campeonatos" Type="Self.campeonatos" Multiplicity="1" />
+          <End Role="participacoes" Type="Self.participacoes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="campeonatos">
+              <PropertyRef Name="cod_camp" />
+            </Principal>
+            <Dependent Role="participacoes">
+              <PropertyRef Name="cod_camp" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="jogos_fk_estadios">
+          <End Role="estadios" Type="Self.estadios" Multiplicity="1" />
+          <End Role="jogos" Type="Self.jogos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="estadios">
+              <PropertyRef Name="cod_est" />
+            </Principal>
+            <Dependent Role="jogos">
+              <PropertyRef Name="cod_estadio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="historicos_fk_jogadores">
+          <End Role="jogadores" Type="Self.jogadores" Multiplicity="1" />
+          <End Role="historicos" Type="Self.historicos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="jogadores">
+              <PropertyRef Name="cod_jog" />
+            </Principal>
+            <Dependent Role="historicos">
+              <PropertyRef Name="cod_jog" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="historicos_fk_times">
+          <End Role="times" Type="Self.times" Multiplicity="1" />
+          <End Role="historicos" Type="Self.historicos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="times">
+              <PropertyRef Name="cod_time" />
+            </Principal>
+            <Dependent Role="historicos">
+              <PropertyRef Name="cod_time" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="jogadores_fk_posicoes">
+          <End Role="posicoes" Type="Self.posicoes" Multiplicity="1" />
+          <End Role="jogadores" Type="Self.jogadores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="posicoes">
+              <PropertyRef Name="cod_pos" />
+            </Principal>
+            <Dependent Role="jogadores">
+              <PropertyRef Name="cod_pos" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="jogadores_fk_times">
+          <End Role="times" Type="Self.times" Multiplicity="0..1" />
+          <End Role="jogadores" Type="Self.jogadores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="times">
+              <PropertyRef Name="cod_time" />
+            </Principal>
+            <Dependent Role="jogadores">
+              <PropertyRef Name="cod_time" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="jogos_fk_times_1">
+          <End Role="times" Type="Self.times" Multiplicity="1" />
+          <End Role="jogos" Type="Self.jogos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="times">
+              <PropertyRef Name="cod_time" />
+            </Principal>
+            <Dependent Role="jogos">
+              <PropertyRef Name="cod_time1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="jogos_fk_times_2">
+          <End Role="times" Type="Self.times" Multiplicity="1" />
+          <End Role="jogos" Type="Self.jogos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="times">
+              <PropertyRef Name="cod_time" />
+            </Principal>
+            <Dependent Role="jogos">
+              <PropertyRef Name="cod_time2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="participacoes_fk_times">
+          <End Role="times" Type="Self.times" Multiplicity="1" />
+          <End Role="participacoes" Type="Self.participacoes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="times">
+              <PropertyRef Name="cod_time" />
+            </Principal>
+            <Dependent Role="participacoes">
+              <PropertyRef Name="cod_time" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="patrocinios_fk_patrocinadores">
+          <End Role="patrocinadores" Type="Self.patrocinadores" Multiplicity="1" />
+          <End Role="patrocinios" Type="Self.patrocinios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="patrocinadores">
+              <PropertyRef Name="cod_pat" />
+            </Principal>
+            <Dependent Role="patrocinios">
+              <PropertyRef Name="cod_pat" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="patrocinios_fk_times">
+          <End Role="times" Type="Self.times" Multiplicity="1" />
+          <End Role="patrocinios" Type="Self.patrocinios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="times">
+              <PropertyRef Name="cod_time" />
+            </Principal>
+            <Dependent Role="patrocinios">
+              <PropertyRef Name="cod_time" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Session2WSTowersEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="campeonatos" EntityType="Self.campeonatos" />
+          <EntitySet Name="estadios" EntityType="Self.estadios" />
+          <EntitySet Name="historicos" EntityType="Self.historicos" />
+          <EntitySet Name="jogadores" EntityType="Self.jogadores" />
+          <EntitySet Name="jogos" EntityType="Self.jogos" />
+          <EntitySet Name="participacoes" EntityType="Self.participacoes" />
+          <EntitySet Name="patrocinadores" EntityType="Self.patrocinadores" />
+          <EntitySet Name="patrocinios" EntityType="Self.patrocinios" />
+          <EntitySet Name="posicoes" EntityType="Self.posicoes" />
+          <EntitySet Name="times" EntityType="Self.times" />
+          <AssociationSet Name="jogos_fk_campeonatos" Association="Self.jogos_fk_campeonatos">
+            <End Role="campeonatos" EntitySet="campeonatos" />
+            <End Role="jogos" EntitySet="jogos" />
+          </AssociationSet>
+          <AssociationSet Name="participacoes_fk_campeonatos" Association="Self.participacoes_fk_campeonatos">
+            <End Role="campeonatos" EntitySet="campeonatos" />
+            <End Role="participacoes" EntitySet="participacoes" />
+          </AssociationSet>
+          <AssociationSet Name="jogos_fk_estadios" Association="Self.jogos_fk_estadios">
+            <End Role="estadios" EntitySet="estadios" />
+            <End Role="jogos" EntitySet="jogos" />
+          </AssociationSet>
+          <AssociationSet Name="historicos_fk_jogadores" Association="Self.historicos_fk_jogadores">
+            <End Role="jogadores" EntitySet="jogadores" />
+            <End Role="historicos" EntitySet="historicos" />
+          </AssociationSet>
+          <AssociationSet Name="historicos_fk_times" Association="Self.historicos_fk_times">
+            <End Role="times" EntitySet="times" />
+            <End Role="historicos" EntitySet="historicos" />
+          </AssociationSet>
+          <AssociationSet Name="jogadores_fk_posicoes" Association="Self.jogadores_fk_posicoes">
+            <End Role="posicoes" EntitySet="posicoes" />
+            <End Role="jogadores" EntitySet="jogadores" />
+          </AssociationSet>
+          <AssociationSet Name="jogadores_fk_times" Association="Self.jogadores_fk_times">
+            <End Role="times" EntitySet="times" />
+            <End Role="jogadores" EntitySet="jogadores" />
+          </AssociationSet>
+          <AssociationSet Name="jogos_fk_times_1" Association="Self.jogos_fk_times_1">
+            <End Role="times" EntitySet="times" />
+            <End Role="jogos" EntitySet="jogos" />
+          </AssociationSet>
+          <AssociationSet Name="jogos_fk_times_2" Association="Self.jogos_fk_times_2">
+            <End Role="times" EntitySet="times" />
+            <End Role="jogos" EntitySet="jogos" />
+          </AssociationSet>
+          <AssociationSet Name="participacoes_fk_times" Association="Self.participacoes_fk_times">
+            <End Role="times" EntitySet="times" />
+            <End Role="participacoes" EntitySet="participacoes" />
+          </AssociationSet>
+          <AssociationSet Name="patrocinios_fk_patrocinadores" Association="Self.patrocinios_fk_patrocinadores">
+            <End Role="patrocinadores" EntitySet="patrocinadores" />
+            <End Role="patrocinios" EntitySet="patrocinios" />
+          </AssociationSet>
+          <AssociationSet Name="patrocinios_fk_times" Association="Self.patrocinios_fk_times">
+            <End Role="times" EntitySet="times" />
+            <End Role="patrocinios" EntitySet="patrocinios" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Session2WSTowersModelStoreContainer" CdmEntityContainer="Session2WSTowersEntities">
+          <EntitySetMapping Name="campeonatos">
+            <EntityTypeMapping TypeName="Session2WSTowersModel.campeonatos">
+              <MappingFragment StoreEntitySet="campeonatos">
+                <ScalarProperty Name="cod_camp" ColumnName="cod_camp" />
+                <ScalarProperty Name="dsc_camp" ColumnName="dsc_camp" />
+                <ScalarProperty Name="ano" ColumnName="ano" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="dat_ini" ColumnName="dat_ini" />
+                <ScalarProperty Name="dat_fim" ColumnName="dat_fim" />
+                <ScalarProperty Name="def_tipo" ColumnName="def_tipo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="estadios">
+            <EntityTypeMapping TypeName="Session2WSTowersModel.estadios">
+              <MappingFragment StoreEntitySet="estadios">
+                <ScalarProperty Name="cod_est" ColumnName="cod_est" />
+                <ScalarProperty Name="nom_est" ColumnName="nom_est" />
+                <ScalarProperty Name="capacidade" ColumnName="capacidade" />
+                <ScalarProperty Name="uf_estadio" ColumnName="uf_estadio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="historicos">
+            <EntityTypeMapping TypeName="Session2WSTowersModel.historicos">
+              <MappingFragment StoreEntitySet="historicos">
+                <ScalarProperty Name="cod_jog" ColumnName="cod_jog" />
+                <ScalarProperty Name="dat_ini" ColumnName="dat_ini" />
+                <ScalarProperty Name="cod_time" ColumnName="cod_time" />
+                <ScalarProperty Name="dat_fim" ColumnName="dat_fim" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="jogadores">
+            <EntityTypeMapping TypeName="Session2WSTowersModel.jogadores">
+              <MappingFragment StoreEntitySet="jogadores">
+                <ScalarProperty Name="cod_jog" ColumnName="cod_jog" />
+                <ScalarProperty Name="dat_nasc" ColumnName="dat_nasc" />
+                <ScalarProperty Name="salario" ColumnName="salario" />
+                <ScalarProperty Name="cod_pos" ColumnName="cod_pos" />
+                <ScalarProperty Name="nom_jog" ColumnName="nom_jog" />
+                <ScalarProperty Name="cod_time" ColumnName="cod_time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="jogos">
+            <EntityTypeMapping TypeName="Session2WSTowersModel.jogos">
+              <MappingFragment StoreEntitySet="jogos">
+                <ScalarProperty Name="cod_camp" ColumnName="cod_camp" />
+                <ScalarProperty Name="cod_time1" ColumnName="cod_time1" />
+                <ScalarProperty Name="cod_time2" ColumnName="cod_time2" />
+                <ScalarProperty Name="cod_estadio" ColumnName="cod_estadio" />
+                <ScalarProperty Name="data" ColumnName="data" />
+                <ScalarProperty Name="resultado" ColumnName="resultado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="participacoes">
+            <EntityTypeMapping TypeName="Session2WSTowersModel.participacoes">
+              <MappingFragment StoreEntitySet="participacoes">
+                <ScalarProperty Name="cod_camp" ColumnName="cod_camp" />
+                <ScalarProperty Name="cod_time" ColumnName="cod_time" />
+                <ScalarProperty Name="pontos" ColumnName="pontos" />
+                <ScalarProperty Name="classif" ColumnName="classif" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="patrocinadores">
+            <EntityTypeMapping TypeName="Session2WSTowersModel.patrocinadores">
+              <MappingFragment StoreEntitySet="patrocinadores">
+                <ScalarProperty Name="cod_pat" ColumnName="cod_pat" />
+                <ScalarProperty Name="nom_pat" ColumnName="nom_pat" />
+                <ScalarProperty Name="pais" ColumnName="pais" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="patrocinios">
+            <EntityTypeMapping TypeName="Session2WSTowersModel.patrocinios">
+              <MappingFragment StoreEntitySet="patrocinios">
+                <ScalarProperty Name="ano" ColumnName="ano" />
+                <ScalarProperty Name="cod_time" ColumnName="cod_time" />
+                <ScalarProperty Name="cod_pat" ColumnName="cod_pat" />
+                <ScalarProperty Name="valor" ColumnName="valor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="posicoes">
+            <EntityTypeMapping TypeName="Session2WSTowersModel.posicoes">
+              <MappingFragment StoreEntitySet="posicoes">
+                <ScalarProperty Name="cod_pos" ColumnName="cod_pos" />
+                <ScalarProperty Name="dsc_pos" ColumnName="dsc_pos" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="times">
+            <EntityTypeMapping TypeName="Session2WSTowersModel.times">
+              <MappingFragment StoreEntitySet="times">
+                <ScalarProperty Name="cod_time" ColumnName="cod_time" />
+                <ScalarProperty Name="uf_time" ColumnName="uf_time" />
+                <ScalarProperty Name="nom_time" ColumnName="nom_time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
